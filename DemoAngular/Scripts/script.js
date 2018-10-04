@@ -4,19 +4,22 @@
 var app = angular
     .module("Demo", ["ngRoute"])
     .config(function ($routeProvider, $locationProvider) {
+        $routeProvider.caseInsensitiveMatch = true;
         $routeProvider
             .when("/home", {
+                //template:"<h1>Inline Template in Action</h1>",
                 templateUrl: "Templates/home.html",
-                controller: "homeController"
+                controller: "homeController",
             })
             .when("/courses", {
                 templateUrl: "Templates/courses.html",
-                controller: "coursesController"
-            })
+                controller: "coursesController",
+             })
             .when("/students", {
                 templateUrl: "Templates/students.html",
-                controller: "studentsController"
-            })
+                controller: "studentsController",
+                controllerAs: "studentsCtrl"
+             })
             .when("/students/:id", {
                 templateUrl: "Templates/studentDetails.html",
                 controller: "studentDetailsController"
@@ -31,11 +34,17 @@ app.controller("homeController", function ($scope) {
     })
 app.controller("coursesController", function ($scope) {
         $scope.courses = ["C#", "VB.NET", "ASP.NET", "SQL Server"];
-    })
-app.controller("studentsController", function ($scope, $http) {
+})
+
+// Removed $scope and Using this 
+app.controller("studentsController", function ( $http ,$route ) {
+    var vm = this;
+    vm.reloadData = function () {
+        $route.reload();
+    }
         $http.get("StudentService.asmx/GetAllStudents")
             .then(function (response) {
-                $scope.students = response.data;
+                vm.students = response.data;
             })
     })
 
