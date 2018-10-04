@@ -1,0 +1,84 @@
+﻿body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+/*table {
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+th {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: left;
+    
+    cursor: pointer;
+}*/
+
+/*This class displays the UP arrow*/
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid black;
+    display: inline-block;
+}
+
+/*This class displays the DOWN arrow*/
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid black;
+    display: inline-block;
+}
+
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.up {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+}
+
+.down {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+}
+.header {
+    width: 800px;
+    height: 80px;
+    text-align: center;
+    background-color: #BDBDBD;
+}
+
+.footer {
+    background-color: #BDBDBD;
+    text-align: center;
+}
+
+.leftMenu {
+    height: 500px;
+    background-color: #D8D8D8;
+    width: 150px;
+}
+
+.mainContent {
+    height: 500px;
+    background-color: #E6E6E6;
+    width: 650px;
+}
+
+a {
+    display: block;
+    padding: 5px
+}
