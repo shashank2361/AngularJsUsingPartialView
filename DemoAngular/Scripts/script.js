@@ -37,8 +37,45 @@ app.controller("coursesController", function ($scope) {
 })
 
 // Removed $scope and Using this 
-app.controller("studentsController", function ( $http ,$route ) {
+app.controller("studentsController", function ($http, $route, $scope,  $log, $location) {
     var vm = this;
+
+    vm.searchStudent = function () {
+        if (vm.searchname) {
+            $location.url("/studentsSearch" + vm.searchname);
+        }
+        else {
+            $location.url("/studentsSearch" );
+        }
+    }
+
+
+    $scope.$on("$routeChangeStart", function (event, next, current) {
+        $log.info("RouteChangeStart Event");
+        $log.info(event);
+        $log.info(next);
+        $log.info(current);
+    });
+
+    $scope.$on("$locationChangeStart", function (event, next, current) {
+        $log.debug("LocationChangeStart Event");
+        $log.debug(event);
+        $log.debug(next);
+        $log.debug(current);
+    });
+
+
+    $scope.$on("$routeChangeStart", function (event, next, current) {
+        if (!confirm("Are you sure you want to navigate away from this page to "
+            + next.$$route.originalPath        )) {
+            event.preventDefault();
+        }
+    });
+
+
+
+
+
     vm.reloadData = function () {
         $route.reload();
     }
