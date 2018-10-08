@@ -2,7 +2,7 @@
 /// <reference path="angular-route.js" />
  
 var app = angular
-    .module("Demo", ["ngRoute"])
+    .module("Demo", ["ngRoute"]) 
     .config(function ($routeProvider, $locationProvider) {
         $routeProvider.caseInsensitiveMatch = true;
         $routeProvider
@@ -18,12 +18,28 @@ var app = angular
             .when("/students", {
                 templateUrl: "Templates/students.html",
                 controller: "studentsController",
-                controllerAs: "studentsCtrl"
+                controllerAs: "studentsCtrl",
+                resolve: {
+                    studentsList: function ($http) {
+                       return $http.get("StudentService.asmx/GetAllStudents")
+                            .then(function (response) {
+                                 return response.data;
+                            })
+                    }
+                }
              })
+            .when("/studentsSearch/:name?", {
+                templateUrl: "Templates/studentsSearch.html",
+                controller: "studentsSearchController",
+                controllerAs: "studentsSearchCtrl"
+
+            })
+
             .when("/students/:id", {
                 templateUrl: "Templates/studentDetails.html",
                 controller: "studentDetailsController"
             })
+
             .otherwise({
                 redirectTo:"/home"
             })
@@ -37,17 +53,18 @@ app.controller("coursesController", function ($scope) {
 })
 
 // Removed $scope and Using this 
-app.controller("studentsController", function ($http, $route, $scope,  $log, $location) {
+app.controller("studentsController", function (studentsList, $route, $scope,  $log, $location) {
     var vm = this;
+    vm.students = studentsList;
+
 
     vm.searchStudent = function () {
-        if (vm.searchname) {
-            $location.url("/studentsSearch" + vm.searchname);
-        }
-        else {
-            $location.url("/studentsSearch" );
-        }
+        if (vm.name)
+            $location.url("/studentsSearch/" + vm.name)
+        else
+            $location.url("/studentsSearch")
     }
+
 
 
     $scope.$on("$routeChangeStart", function (event, next, current) {
@@ -67,22 +84,21 @@ app.controller("studentsController", function ($http, $route, $scope,  $log, $lo
 
     $scope.$on("$routeChangeStart", function (event, next, current) {
         if (!confirm("Are you sure you want to navigate away from this page to "
-            + next.$$route.originalPath        )) {
+            + next.$$route.originalPath )) {
             event.preventDefault();
         }
     });
 
 
-
-
-
     vm.reloadData = function () {
         $route.reload();
     }
-        $http.get("StudentService.asmx/GetAllStudents")
-            .then(function (response) {
-                vm.students = response.data;
-            })
+
+    
+    //$http.get("StudentService.asmx/GetAllStudents")
+    //        .then(function (response) {
+    //            vm.students = response.data;
+    //        })
     })
 
 app.controller("studentDetailsController", function ($scope, $http, $routeParams) {
@@ -94,3 +110,34 @@ app.controller("studentDetailsController", function ($scope, $http, $routeParams
         $scope.student = response.data;
     })
 })
+
+app.controller("studentsSearchController", function ( $log, $http, $routeParams) {
+
+    vm = this;
+    alert($routeParams.name);
+    if ($routeParams.name) {
+
+        $http({
+            url: "StudentService.asmx/GetStudentsByName",
+            method: "get",
+            params: { name: $routeParams.name }
+        }).then(function (response) {
+            vm.students = response.data;
+            $log.info(response.data);
+        })
+
+    }
+    else {
+
+        $http.get("StudentService.asmx/GetAllStudents")
+            .then(function (response) {
+                vm.students = response.data;
+
+            })
+
+
+    }
+
+})
+
+

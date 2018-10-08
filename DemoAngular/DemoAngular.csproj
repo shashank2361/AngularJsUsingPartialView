@@ -847,6 +847,7 @@
     <Content Include="Templates\home.html" />
     <Content Include="Templates\studentDetails.html" />
     <Content Include="Templates\Students.html" />
+    <Content Include="Templates\studentsSearch.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
